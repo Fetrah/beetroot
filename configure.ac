@@ -18,6 +18,11 @@ AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 AC_PROG_LN_S
 
+# Checks for boost
+BOOST_REQUIRE
+BOOST_FOREACH
+BOOST_FORMAT
+
 AC_SEARCH_ROOT([AC_MSG_NOTICE([Found Root])],[AC_MSG_ERROR([ROOT is required and is not found.  Please either set the path to Root using ROOTSYS or --with-root-config or --with-root])])
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -30,6 +35,16 @@ AM_CXXFLAGS="$AM_CXXFLAGS -Wall -O2 "
 AM_CPPFLAGS="$AM_CPPFLAGS -Wall -O2 -I\$(top_builddir)"
 AC_SUBST(AM_CXXFLAGS)
 AC_SUBST(AM_CPPFLAGS)
+
+DX_HTML_FEATURE(ON)
+DX_CHM_FEATURE(OFF)
+DX_CHI_FEATURE(OFF)
+DX_MAN_FEATURE(OFF)
+DX_RTF_FEATURE(OFF)
+DX_XML_FEATURE(OFF)
+DX_PDF_FEATURE(OFF)
+DX_PS_FEATURE(OFF)
+DX_INIT_DOXYGEN(libbeetroot, doxygen.cfg, doc)
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

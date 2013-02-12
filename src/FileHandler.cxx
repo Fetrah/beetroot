@@ -2,6 +2,11 @@
 #include "beetroot/FileHandler.h"
 // STL
 #include <iostream>
+// BOOST
+#include <boost/format.hpp>
+// ROOT
+#include <TFile.h>
+#include <TObject.h>
 
 namespace beetroot {
 
@@ -32,6 +37,23 @@ namespace beetroot {
   void FileHandler::mkcd( const std::string &dirName ) const {
     this->mkdir( dirName );
     this->cd( dirName );
+  }
+
+  void FileHandler::ls() const {
+    m_file->ls();
+  }
+ 
+  void FileHandler::deregisterObjects( const std::string &objectName ) const {
+    m_file->GetList()->Remove( m_file->GetList()->FindObject( objectName.c_str() ) );
+    gDirectory->GetList()->Remove( gDirectory->GetList()->FindObject( objectName.c_str() ) );
+  }
+
+  TObject* FileHandler::getObject( const std::string &objectName ) const {
+    return m_file->Get( objectName.c_str() );
+  }
+
+  std::string FileHandler::name() const {
+    return (boost::format("%s")%m_file->GetName()).str();
   }
 
 }
