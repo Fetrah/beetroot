@@ -31,8 +31,8 @@ AC_CHECK_HEADER_STDBOOL
 # Checks for library functions.
 AC_CHECK_FUNCS([mkdir])
 
-AM_CXXFLAGS="$AM_CXXFLAGS -Wall -O2 "
-AM_CPPFLAGS="$AM_CPPFLAGS -Wall -O2 -I\$(top_builddir)"
+AM_CXXFLAGS="$AM_CXXFLAGS -O2 -Wall -Wextra -Wabi -Weffc++ -Wno-reorder"
+AM_CPPFLAGS="$AM_CPPFLAGS -O2 -Wall -Wextra -Wabi -Weffc++ -Wno-reorder -I\$(top_builddir)"
 AC_SUBST(AM_CXXFLAGS)
 AC_SUBST(AM_CPPFLAGS)
 
