@@ -17,6 +17,7 @@ namespace beetroot {
     
     /** Default constructor */
     IFillable();
+    /** Default destructor */
     virtual ~IFillable();
         
   private:

@@ -50,7 +50,6 @@ if test x$have_root_config = xyes ; then
   
   if test x$ROOTCINT != xno && test x$xmlparser != xno ; then
     if test -n $shlibpath_var ; then
-#      ROOTCINT="$shlibpath_var=$ROOTLIBDIR:@$shlibpath_var@  $ROOTCINT"
       ROOTCINT="$ROOTCINT"
     fi
     have_root=yes

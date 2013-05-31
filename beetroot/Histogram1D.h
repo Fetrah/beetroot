@@ -1,23 +1,57 @@
 #ifndef BEETROOT_HISTOGRAM1D_H
 #define BEETROOT_HISTOGRAM1D_H
+
 // Local
-#include "beetroot/Graph.h"
-#include "beetroot/Drawable.h"
+#include "beetroot/Named.h"
 // STL
 #include <string>
 #include <vector>
-// ROOT
-#include <TAxis.h>
-#include <TH1D.h>
-#include <TH1F.h>
-#include <TProfile.h>
+// BOOST
+#include <boost/scoped_ptr.hpp>
+
+namespace YODA { class Histo1D; }
+class TH1D;
 
 namespace beetroot {
 
-  //////////////////////////////////////////////////////////////////////////////////////////
-  //  1D histogram
-  //////////////////////////////////////////////////////////////////////////////////////////
-  class Histogram1D : public TH1D, public Drawable {
+  /** @brief Histogram class with separation between data and presentation
+
+    * Histogram class with separation between data and presentation
+    * YODA is used to store the data and ROOT for the presentation
+    * @author James Robinson <james.robinson@cern.ch>
+    * @date May 2013
+    */
+  class Histogram1D : public Named {
+    
+  public:
+    /** Default constructor */
+    Histogram1D( const std::string &name, const std::vector<double> &xBins );
+    //Histogram1D( const std::string &name, const int nBins, const double xLow, const double xHigh );
+    /** Default copy constructor */
+    Histogram1D( const Histogram1D &otherHistogram1D );
+    /** Construct from a ROOT TH1D */
+    Histogram1D( const TH1D &otherTH1D );
+    /** Virtual destructor */
+    virtual ~Histogram1D();
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //  Methods
+    //////////////////////////////////////////////////////////////////////////////////////////
+    Histogram1D& operator=( const Histogram1D &otherHistogram1D );
+    void printAll();
+
+  private:
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //  Member variables
+    //////////////////////////////////////////////////////////////////////////////////////////
+    boost::scoped_ptr<YODA::Histo1D> m_data;
+    boost::scoped_ptr<TH1D> m_style;
+
+  };
+
+}
+
+  /*class Histogram1D : public TH1D, public Drawable {
 
     public:
       //////////////////////////////////////////////////////////////////////////////////////////
@@ -53,6 +87,6 @@ namespace beetroot {
 
     private:
       virtual void removeBadPoints();
-  };
-}
+  };*/
+
 #endif // BEETROOT_HISTOGRAM1D_H
