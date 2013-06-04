@@ -13,15 +13,10 @@
 // ROOT
 //#include <TAxis.h>
 #include <TH1D.h>
-//#include <TH1F.h>
+#include <TH1F.h>
 //#include <TProfile.h>
 
 namespace beetroot {
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  //  ROOT Helpers
-  //////////////////////////////////////////////////////////////////////////////////////////
-
 
   //////////////////////////////////////////////////////////////////////////////////////////
   //  Histogram 1D
@@ -74,6 +69,40 @@ namespace beetroot {
     }
   }
 
+  Histogram1D::Histogram1D( const TH1F &otherTH1F )
+    : Named( otherTH1F.GetName() )
+    , m_data( new YODA::Histo1D( ROOTUtils::getXBins(otherTH1F) ) )
+    , m_style( new TH1D(UUIDWrapper::generate().c_str(), UUIDWrapper::generate().c_str(), (ROOTUtils::getXBins(otherTH1F).size()>0?ROOTUtils::getXBins(otherTH1F).size()-1:0), &ROOTUtils::getXBins(otherTH1F)[0]) )
+  {
+    /** Make the style histogram memory-resident */
+    m_style->SetDirectory(0);
+
+    /** Loop over the input histogram bins and extract fill parameters 
+      * taking n = c^2 / e^2 and w = e^2 / c
+      * Since we can't guarantee that n is integral, we take floor(n)
+      * then add one more event with weight: w_final = ( c - floor(n)*w ) 
+      * NB. negative bin content => negative weight
+      */
+    for( int iBin = 0; iBin <= otherTH1F.GetNbinsX()+1; ++iBin ) {
+      const double x = otherTH1F.GetBinCenter(iBin);
+      const double c = otherTH1F.GetBinContent(iBin);
+      const double e = otherTH1F.GetBinError(iBin);
+      unsigned int n = floor( (c*c) / (e*e) );
+      double w = e*e / c;
+      /** Catch cases where c or w are inf or nan */
+      if( !std::isnormal(n) ) { n = 0; }
+      if( !std::isnormal(w) ) { w = 0; }
+      std::cout << "c = " << c << " +/- " << e << " => " << n << " lots of " << w << std::endl;
+      for( unsigned int iFill = 0; iFill < n; ++iFill ) {
+        m_data->fill( x, w );
+      }
+      if( c > (n * w) ) {
+        m_data->fill( x, (c - n*w) );
+      }
+    }
+  }
+
+
   Histogram1D::Histogram1D( const Histogram1D &otherHistogram1D )
     : Named( otherHistogram1D.name() )
     , m_data( otherHistogram1D.m_data.get() )
@@ -88,7 +117,6 @@ namespace beetroot {
 
   Histogram1D::~Histogram1D() {}
 
-
   void Histogram1D::printAll() {
     std::cout << "***** Style *****" << std::endl;
     m_style->Print("all");
@@ -101,8 +129,27 @@ namespace beetroot {
     std::cout << "***** End *****" << std::endl;
   }
 
+  std::vector<double> Histogram1D::bins() const {
+    std::vector<double> output_bins;
+    BOOST_FOREACH( const YODA::HistoBin1D &bin, m_data->bins() ) {
+      output_bins.push_back( /*bin.lowEdge()*/ bin.midpoint() );
+    }
+    //output_bins.push_back( m_data->bins.back().highEdge() );
+    BOOST_FOREACH( const double &out, output_bins ) {
+      std::cout << "Bin: " << out << std::endl;
+    }
+    return output_bins;
+  }
 
-
+  std::vector<DataPoint> Histogram1D::data() const {
+    std::vector<DataPoint> output_data;
+    BOOST_FOREACH( const YODA::HistoBin1D &bin, m_data->bins() ) {
+      double x(bin.midpoint()), ex(bin.midpoint()-bin.lowEdge());
+      double y(bin.area()), ey(bin.areaErr());
+      output_data.push_back( DataPoint(x, ex, y, ey) );
+    }
+    return output_data;
+  }
 
   // //////////////////////////////////////////////////////////////////////////////////////////
   // //  Histogram 1D

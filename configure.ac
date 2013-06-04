@@ -32,6 +32,9 @@ AC_SEARCH_ROOT([AC_MSG_NOTICE([Found Root])],
 # Checks for YODA
 AC_CHECK_YODA
 
+# Checks for MathGL
+AC_CHECK_MATHGL
+
 ## Checks for typedefs, structures, and compiler characteristics.
 #AC_CHECK_HEADER_STDBOOL
 

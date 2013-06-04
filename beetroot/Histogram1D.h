@@ -2,6 +2,7 @@
 #define BEETROOT_HISTOGRAM1D_H
 
 // Local
+#include "beetroot/DataPoint.h"
 #include "beetroot/Named.h"
 // STL
 #include <string>
@@ -11,6 +12,7 @@
 
 namespace YODA { class Histo1D; }
 class TH1D;
+class TH1F;
 
 namespace beetroot {
 
@@ -31,6 +33,8 @@ namespace beetroot {
     Histogram1D( const Histogram1D &otherHistogram1D );
     /** Construct from a ROOT TH1D */
     Histogram1D( const TH1D &otherTH1D );
+    /** Construct from a ROOT TH1F */
+    Histogram1D( const TH1F &otherTH1F );
     /** Virtual destructor */
     virtual ~Histogram1D();
 
@@ -39,6 +43,9 @@ namespace beetroot {
     //////////////////////////////////////////////////////////////////////////////////////////
     Histogram1D& operator=( const Histogram1D &otherHistogram1D );
     void printAll();
+
+    std::vector<double> bins() const;
+    std::vector<DataPoint> data() const;
 
   private:
     //////////////////////////////////////////////////////////////////////////////////////////

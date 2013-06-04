@@ -20,6 +20,7 @@ namespace beetroot {
 
     /** Name accessor */
     virtual const std::string &name() const;
+    
     /** Name setter */
     virtual void name( const std::string &name );
         
