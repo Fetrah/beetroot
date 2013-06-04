@@ -1,6 +1,6 @@
 // Local
 #include "beetroot/DataPoint.h"
-
+#include <iostream>
 namespace beetroot {
 
   /** Default constructor */
@@ -34,27 +34,27 @@ namespace beetroot {
   {}
 
   /** Get x */
-  const double &DataPoint::x() const { return m_x; }
+  double DataPoint::x() const { return m_x; }
 
   /** Get y */
-  const double &DataPoint::y() const { return m_y; }
+  double DataPoint::y() const { return m_y; }
 
   /** Get ex */
-  const double &DataPoint::ex() const { return 0.5*(m_exlow+m_exhigh); }
+  double DataPoint::ex() const { return 0.5*(m_exlow+m_exhigh); }
 
   /** Get ey */
-  const double &DataPoint::ey() const { return 0.5*(m_eylow+m_eyhigh); }
+  double DataPoint::ey() const { return 0.5*(m_eylow+m_eyhigh); }
 
   /** Get exlow */
-  const double &DataPoint::exlow() const { return m_exlow; }
+  double DataPoint::exlow() const { return m_exlow; }
 
   /** Get exhigh */
-  const double &DataPoint::exhigh() const { return m_exhigh; }
+  double DataPoint::exhigh() const { return m_exhigh; }
 
   /** Get eylow */
-  const double &DataPoint::eylow() const { return m_eylow; }
+  double DataPoint::eylow() const { return m_eylow; }
 
   /** Get eyhigh */
-  const double &DataPoint::eyhigh() const { return m_eyhigh; }
+  double DataPoint::eyhigh() const { return m_eyhigh; }
 
 }

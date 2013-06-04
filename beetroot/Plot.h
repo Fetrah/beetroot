@@ -3,9 +3,9 @@
 
 // Local
 #include "beetroot/Axis.h"
+#include "beetroot/Dataset.h"
 #include "beetroot/Histogram1D.h"
 // STL
-// #include <string>
 #include <utility>
 #include <vector>
 // BOOST
@@ -44,8 +44,8 @@ namespace beetroot {
 
     Axis m_x_axis, m_y_axis;
 
-    typedef std::pair<mglData,mglData> mgl_dataset;
-    std::vector< mgl_dataset /*mglData*/ > m_datasets;
+    //typedef std::pair<mglData,mglData> mgl_dataset;
+    std::vector< Dataset > m_datasets;
 
     void draw( const boost::scoped_ptr<mglGraph> &m_baseFigure ) const;
   

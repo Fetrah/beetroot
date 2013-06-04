@@ -146,6 +146,7 @@ namespace beetroot {
     BOOST_FOREACH( const YODA::HistoBin1D &bin, m_data->bins() ) {
       double x(bin.midpoint()), ex(bin.midpoint()-bin.lowEdge());
       double y(bin.area()), ey(bin.areaErr());
+      std::cout << "Filling with " << x << " +/- " << ex << " :: " << y << " +/- " << ey << std::endl;
       output_data.push_back( DataPoint(x, ex, y, ey) );
     }
     return output_data;

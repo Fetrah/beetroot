@@ -28,34 +28,23 @@ namespace beetroot {
   {}
 
   void Plot::add_function( const std::string &function ) {
-    //m_parentFigure->FPlot( function.c_str() );
-    //m_parentFigure->Axis();
-    //m_parentFigure->Label('y',"axis 1",0); 
-    //m_parentFigure->Box();
     m_function = function;
-    std::cout << "Setting function to " << m_function << " for " << this << std::endl;
     return;
   }
 
   void Plot::add_data( const Histogram1D &hist ) {
-    mglData x( hist.bins().size() ), y( hist.bins().size() );
+    mglData x( hist.bins().size() ), y( hist.bins().size() ), ex( hist.bins().size() ), ey( hist.bins().size() );
     unsigned int index(0);
     BOOST_FOREACH( const DataPoint &data_point, hist.data() ) {
       x.a[index] = data_point.x();
       y.a[index] = data_point.y();
-      std::cout << "x,y :: " << x.a[index] << ", " << y.a[index] << std::endl;
+      ex.a[index] = data_point.ex();
+      ey.a[index] = data_point.ey();
+      std::cout << "x,y :: " << x.a[index] << ", " << y.a[index] << " ex,ey :: " << data_point.ex() << ", " << ey.a[index] << std::endl;
       ++index;
     }
-    m_datasets.push_back( std::make_pair(x,y) /*y*/ );
+    m_datasets.push_back( Dataset( x, y, ex, ey ) );
   }
-
-  // void Plot::print() {
-  //   std::cout << this << " properties: ( "<<m_xlow<<", "<<m_xhigh<<", "<<m_ylow<<", "<<m_yhigh<<", false )" << std::endl;
-  // }
-
-  //   m_figure->Axis();
-  //   m_figure->Label('y',"axis 1",0); 
-  //   m_figure->Box();
 
   Axis& Plot::get_axis( const Axis::Dimension &axis ) {
     if( axis == Axis::X ) { return m_x_axis; }
@@ -79,8 +68,10 @@ namespace beetroot {
       m_baseFigure->FPlot( m_function.c_str() );
     }
     /** Plot datasets if there are any */
-    BOOST_FOREACH( const mgl_dataset &dataset, m_datasets ) {
-      m_baseFigure->Plot( dataset.first, dataset.second /*, "o"*/ );
+    BOOST_FOREACH( const Dataset &dataset, m_datasets ) {
+      //m_baseFigure->Plot( dataset.x().get(), dataset.y().get() /*, "o"*/ );
+      std::cout << "Plotting..." << std::endl;
+      m_baseFigure->Error( dataset.x(), dataset.y(), dataset.ex(), dataset.ey(), "ko" );
     }
     m_baseFigure->Axis();
     m_baseFigure->Box();
